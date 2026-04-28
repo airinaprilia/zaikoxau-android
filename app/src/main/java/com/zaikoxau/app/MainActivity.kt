@@ -10,16 +10,16 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
-    private lateinit var swipe: SwipeRefreshLayout
+    private lateinit var btnReload: ImageButton
     private lateinit var progress: ProgressBar
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         webView = findViewById(R.id.webview)
-        swipe = findViewById(R.id.swipe)
+        btnReload = findViewById(R.id.btnReload)
         progress = findViewById(R.id.progress)
 
         webView.settings.apply {
@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, req: WebResourceRequest): Boolean {
                 val url = req.url.toString()
-                // Keep navigation inside ZaikoXAU. External links open in browser.
                 return if (url.contains(BuildConfig.HOST_DOMAIN) || url.contains("hf.space")) {
                     false
                 } else {
@@ -59,7 +58,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             override fun onPageFinished(view: WebView?, url: String?) {
-                swipe.isRefreshing = false
                 progress.visibility = View.GONE
             }
         }
@@ -70,10 +68,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        swipe.setColorSchemeColors(Color.parseColor("#d4af37"))
-        swipe.setOnRefreshListener { webView.reload() }
+        btnReload.setOnClickListener { webView.reload() }
 
-        // Hardware back button -> webview back navigation
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (webView.canGoBack()) webView.goBack() else finish()

@@ -15,7 +15,7 @@ android {
         versionName = "1.0.0"
 
         // Edit these to point to YOUR deployed web app
-        buildConfigField("String", "WEB_URL", "\"https://zaiko-zaikoxau.hf.space\"")
+        buildConfigField("String", "WEB_URL", "\"https://airinz-zaikoxau.hf.space\"")
         buildConfigField("String", "HOST_DOMAIN", "\"zaikoxau\"")
     }
 
